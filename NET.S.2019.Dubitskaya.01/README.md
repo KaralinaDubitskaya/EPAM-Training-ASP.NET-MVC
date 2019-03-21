@@ -1,9 +1,9 @@
 # Day 01
 ### EPAM-Training-ASP.NET-MVC
 
-###### Task:
+#### Task:
 1. Implement quick sort and merge sort algorithms for integer arrays.
 2. Test project using unit testing.
 
-Karalina Dubitskaya
+Karalina Dubitskaya                                                                                                   
 dubitskaya.karalina@gmail.com
