@@ -192,8 +192,8 @@ namespace ArrayExtension
             }
 
             int middle = (left + right + 1) / 2;
-            MergeSort(array, left, middle - 1);
-            MergeSort(array, middle, right);
+            SortArrayByMergeSort(array, left, middle - 1);
+            SortArrayByMergeSort(array, middle, right);
             Merge(array, left, middle, right);
         }
 

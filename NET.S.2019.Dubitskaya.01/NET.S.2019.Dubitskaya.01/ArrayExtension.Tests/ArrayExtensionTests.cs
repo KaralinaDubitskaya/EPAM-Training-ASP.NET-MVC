@@ -15,6 +15,8 @@ namespace ArrayExtension.Tests
             return true;
         }
 
+        #region MergeSort Tests
+
         [TestMethod]
         public void MergeSortEmptyArrayTest()
         {
@@ -51,6 +53,10 @@ namespace ArrayExtension.Tests
             Assert.IsTrue(expected);
         }
 
+        #endregion
+
+        #region QuickSort Tests
+
         [TestMethod]
         public void QuickSortEmptyArrayTest()
         {
@@ -86,5 +92,7 @@ namespace ArrayExtension.Tests
             bool expected = IsSorted(testArray);
             Assert.IsTrue(expected);
         }
+
+        #endregion
     }
 }
