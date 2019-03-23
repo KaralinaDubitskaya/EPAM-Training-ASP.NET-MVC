@@ -1,10 +1,10 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace NumberInserting.Tests
+namespace NumberInserting.Tests.MS
 {
     [TestClass]
-    public class NumberInserterTests
+    public class NumberInserterTestsMS
     {
         [TestMethod]
         public void InsertNumber_InsertSameBit()
