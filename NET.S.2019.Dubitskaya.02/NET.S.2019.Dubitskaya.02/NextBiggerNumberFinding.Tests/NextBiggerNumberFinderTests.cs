@@ -25,6 +25,34 @@ namespace NextBiggerNumberFinding.Tests
         [TestCase(2147483647, ExpectedResult = -1)]
         public int FindNextBiggerNumber_BiggerNotExist(int number)
             => NextBiggerNumberFinder.FindNextBiggerNumber(number);
+        
+        [Test]
+        public void FindNextBiggerNumber_TimeSpanIsValid()
+        {
+            var timer = System.Diagnostics.Stopwatch.StartNew();
+            var expectedNumber = 1241233;
+
+            var actualNumber = NextBiggerNumberFinder.FindNextBiggerNumber(1234321, out TimeSpan actualTime);
+            timer.Stop();
+
+            Assert.That(actualTime > TimeSpan.Zero && actualTime <= timer.Elapsed);
+            Assert.AreEqual(expectedNumber, actualNumber);
+        }
+
+        [Test]
+        public void FindNextBiggerNumberAndTimeElapsed_TimeSpanIsValid()
+        {
+            var timer = System.Diagnostics.Stopwatch.StartNew();
+            var expectedNumber = 1241233;
+
+            (int number, TimeSpan timeElapsed) actualResult =
+                NextBiggerNumberFinder.FindNextBiggerNumberAndTimeElapsed(1234321);
+            timer.Stop();
+
+            Assert.That(actualResult.timeElapsed > TimeSpan.Zero &&
+                actualResult.timeElapsed <= timer.Elapsed);
+            Assert.AreEqual(expectedNumber, actualResult.number);
+        }
 
         [Test]
         public void FindNextBiggerNumber_NegativeNumber_ArgumentException()

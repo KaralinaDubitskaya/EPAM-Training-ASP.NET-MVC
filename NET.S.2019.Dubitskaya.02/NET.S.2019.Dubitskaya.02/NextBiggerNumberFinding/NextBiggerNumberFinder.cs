@@ -60,6 +60,54 @@ namespace NextBiggerNumberFinding
                 return -1;
             }  
         }
+        
+        /// <summary>
+        /// Return the closest number which is larger than a given source number and consists of the same digits.
+        /// </summary>
+        /// <param name="number">The source number.</param>
+        /// <param name="time">Time taken to find the number.</param>
+        /// <returns>
+        /// Next bigger number which consists of the same digits as the source number.
+        /// If it doesn't exist or is bigger than 4-bytes value, return -1.
+        /// Out-parameter time returns time taken to find the number.
+        /// </returns>
+        /// <exception cref="ArgumentException">Thrown when the source number is negative.</exception>
+        /// <example> FindNextBiggerNumber(414) - > 441 </example>
+        /// <example> FindNextBiggerNumber(3456432) - > 3462345 </example>
+        /// <example> FindNextBiggerNumber(20) - > -1 </example>
+        public static int FindNextBiggerNumber(int number, out TimeSpan time)
+        {
+            var timer = System.Diagnostics.Stopwatch.StartNew();
+
+            int result = FindNextBiggerNumber(number);
+            timer.Stop();
+            time = timer.Elapsed;
+
+            return result;
+        }
+
+        /// <summary>
+        /// Return the closest number which is larger than a given source number and consists of the same digits.
+        /// </summary>
+        /// <param name="number">The source number.</param>
+        /// <returns>
+        /// Next bigger number which consists of the same digits as the source number.
+        /// If it doesn't exist or is bigger than 4-bytes value, return -1.
+        /// As the second parameter of the tuple returns time taken to find the number.
+        /// </returns>
+        /// <exception cref="ArgumentException">Thrown when the source number is negative.</exception>
+        /// <example> FindNextBiggerNumber(414) - > 441 </example>
+        /// <example> FindNextBiggerNumber(3456432) - > 3462345 </example>
+        /// <example> FindNextBiggerNumber(20) - > -1 </example>
+        public static (int number, TimeSpan time) FindNextBiggerNumberAndTimeElapsed(int number)
+        {
+            var startTime = DateTime.Now;
+
+            int resultNumber = FindNextBiggerNumber(number);
+            TimeSpan timeElapsed = DateTime.Now - startTime;
+
+            return (resultNumber, timeElapsed);
+        }
 
         /// <summary>
         /// Swap two values.
