@@ -9,9 +9,9 @@ namespace NumberInserting
     public static class NumberInserter
     {
         /// <summary>
-        /// Number of bits in Int32 value.
+        /// Number of bits in 4 bytes.
         /// </summary>
-        private const int _intLengthInBits = 32;
+        private const int IntLengthInBits = 32;
 
         /// <summary>
         /// Insert starting bits from numberIn into numberSource at the given positions.
@@ -22,7 +22,7 @@ namespace NumberInserting
         /// <param name="endIndex">The ending position of bits to be inserted.</param>
         /// <returns>Number with inserted bits.</returns>
         /// <exception cref="ArgumentException">Thrown when starting index is greater than the ending index or some index is negative.</exception>
-        /// <exception cref="IndexOutOfRangeException">Thrown when some index is greater than 31 (the last index of the Int32 value).</exception>
+        /// <exception cref="IndexOutOfRangeException">Thrown when some index is greater than 31 (max index in 4-bytes value).</exception>
         /// <example> InsertNumber(15, 15, 0, 0) -> 15 </example>
         /// <example> InsertNumber(8, 15, 0, 0) -> 9 </example>
         /// <example> InsertNumber(8, 15, 3, 8) -> 120 </example>
@@ -44,7 +44,7 @@ namespace NumberInserting
         /// <param name="numOfBits">Number of bits to be extracted.</param>
         /// <returns>Extracted bits.</returns>
         /// <exception cref="ArgumentException">Thrown when the number of bits is negative.</exception>
-        /// <exception cref="IndexOutOfRangeException">Thrown when the number of bits is greater than 31 (the last index of the Int32 value).</exception>
+        /// <exception cref="IndexOutOfRangeException">Thrown when the number of bits is greater than 31 (max index in 4-bytes value).</exception>
         /// <example> ExtractBits(14, 3) -> 6 </example>
         private static int ExtractBits(int number, int numOfBits)
         {
@@ -53,9 +53,15 @@ namespace NumberInserting
                 throw new ArgumentException("The number of bits cannot be negative.");
             }
 
-            if (numOfBits > _intLengthInBits)
+            if (numOfBits > IntLengthInBits)
             {
                 throw new IndexOutOfRangeException("The number of bits cannot be greater than 31 for Int32 values.");
+            }
+
+            // Return the whole number.
+            if (numOfBits == 32)
+            {
+                return number;
             }
 
             // Example: 0b0100 - 1 = 0b0011.
@@ -71,24 +77,31 @@ namespace NumberInserting
         /// <param name="end">The ending index of the range.</param>
         /// <returns>The number with the range of bits filled with zeros.</returns>
         /// <exception cref="ArgumentException">Thrown when starting index is greater than the ending index or some index is negative.</exception>
-        /// <exception cref="IndexOutOfRangeException">Thrown when some index is greater than 31 (the last index of the Int32 value).</exception>
+        /// <exception cref="IndexOutOfRangeException">Thrown when some index is greater than 31 (max index in 4-bytes value).</exception>
         /// <example> FillBitsWithZeros(15, 1, 2) -> 9 </example>
         private static int FillBitsWithZeros(int number, int start, int end)
         {
             ValidateIndexes(start, end);
 
             int numOfZeroBits = end - start + 1;
+
+            // Fill all bits with zeros.
+            if (numOfZeroBits == 32)
+            {
+                return 0;
+            }
+
             int mask = (1 << numOfZeroBits) - 1;
             return number & ~mask;
         }
 
         /// <summary>
-        /// Validate the indexes of a bits range in the Int32 value.
+        /// Validate the indexes of a bits range in the 4-bytes value.
         /// </summary>
         /// <param name="start">The starting index.</param>
         /// <param name="end">The ending index.</param>
         /// <exception cref="ArgumentException">Thrown when starting index is greater than the ending index or some index is negative.</exception>
-        /// <exception cref="IndexOutOfRangeException">Thrown when some index is greater than 31 (the last index of the Int32 value).</exception>
+        /// <exception cref="IndexOutOfRangeException">Thrown when some index is greater than 31 (max index in 4-bytes value).</exception>
         private static void ValidateIndexes(int start, int end)
         {
             if (start > end)
@@ -101,7 +114,7 @@ namespace NumberInserting
                 throw new ArgumentException("Index cannot be negative.");
             }
 
-            if (start >= _intLengthInBits || end >= _intLengthInBits)
+            if (start >= IntLengthInBits || end >= IntLengthInBits)
             {
                 throw new IndexOutOfRangeException("The index cannot be greater than 31 (the last index of the Int32 value).");
             }
