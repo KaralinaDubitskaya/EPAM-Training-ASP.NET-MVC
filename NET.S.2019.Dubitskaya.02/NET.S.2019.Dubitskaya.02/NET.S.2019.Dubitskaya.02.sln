@@ -13,6 +13,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NextBiggerNumberFinding", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NextBiggerNumberFinding.Tests", "NextBiggerNumberFinding.Tests\NextBiggerNumberFinding.Tests.csproj", "{8F338802-A2C6-4583-A082-4594EF14B79A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigitsFiltering", "DigitsFilter\DigitsFiltering.csproj", "{EA345225-0F89-4AAD-8173-97A24483FCD7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigitsFiltering.Tests", "DigitsFiltering.Tests\DigitsFiltering.Tests.csproj", "{9C27A761-13CA-4757-A00D-422FB9F27E72}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +43,14 @@ Global
 		{8F338802-A2C6-4583-A082-4594EF14B79A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F338802-A2C6-4583-A082-4594EF14B79A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F338802-A2C6-4583-A082-4594EF14B79A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA345225-0F89-4AAD-8173-97A24483FCD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA345225-0F89-4AAD-8173-97A24483FCD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA345225-0F89-4AAD-8173-97A24483FCD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA345225-0F89-4AAD-8173-97A24483FCD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C27A761-13CA-4757-A00D-422FB9F27E72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C27A761-13CA-4757-A00D-422FB9F27E72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C27A761-13CA-4757-A00D-422FB9F27E72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C27A761-13CA-4757-A00D-422FB9F27E72}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

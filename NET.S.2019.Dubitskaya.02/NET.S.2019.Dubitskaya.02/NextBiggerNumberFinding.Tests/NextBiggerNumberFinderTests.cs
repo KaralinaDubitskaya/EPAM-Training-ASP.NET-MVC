@@ -49,7 +49,7 @@ namespace NextBiggerNumberFinding.Tests
                 NextBiggerNumberFinder.FindNextBiggerNumberAndTimeElapsed(1234321);
             timer.Stop();
 
-            Assert.That(actualResult.timeElapsed > TimeSpan.Zero &&
+            Assert.That(actualResult.timeElapsed >= TimeSpan.Zero &&
                 actualResult.timeElapsed <= timer.Elapsed);
             Assert.AreEqual(expectedNumber, actualResult.number);
         }
