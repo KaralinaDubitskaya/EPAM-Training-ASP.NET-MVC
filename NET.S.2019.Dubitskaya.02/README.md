@@ -1,10 +1,12 @@
 # Day 02
 ### EPAM-Training-ASP.NET-MVC
 
-#### Tasks:
+### Tasks:
 1. Implement the **InsertNumber** method which gets two integer numbers and two positions of bits i and j (i <j). The algorithm inserts bits of one number into another so that the bits of the second number take positions from bit j to bit i (bits are numbered from right to left). Add NUnit and (!) MS Unit Test to test the method. 
 
-![Task #1 algorithm](https://github.com/KaralinaDubitskaya/NET.S.2019.Dubitskaya/blob/day2/NET.S.2019.Dubitskaya.02/screens/Task1.png)
+<p align="center">
+  <img width="460" height="300" alt="Task #1 algorithm" src="https://github.com/KaralinaDubitskaya/NET.S.2019.Dubitskaya/blob/day2/NET.S.2019.Dubitskaya.02/screens/Task1.png">
+</p>
 
 2. Implement the **FindNextBiggerNumber** method, which takes a positive integer and returns the closest largest integer consisting of the digits of the original number, and - 1 if no such number exists. Add NUnit or MS Unit tests.
 
