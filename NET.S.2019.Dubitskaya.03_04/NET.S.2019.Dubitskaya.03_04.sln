@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GCDFinding", "GCDFinding\GC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GCDFinding.Tests", "GCDFinding.Tests\GCDFinding.Tests.csproj", "{A0E34689-E39E-48BD-A6E8-835AEE445002}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoubleExtentions", "NumericExtentions\DoubleExtentions.csproj", "{6D263365-2717-4367-85C5-39F8E3439513}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoubleExtensions.Tests", "DoubleExtensions.Tests\DoubleExtensions.Tests.csproj", "{32BF975A-99CC-497C-AD37-4A9A57D1F743}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{A0E34689-E39E-48BD-A6E8-835AEE445002}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A0E34689-E39E-48BD-A6E8-835AEE445002}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A0E34689-E39E-48BD-A6E8-835AEE445002}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D263365-2717-4367-85C5-39F8E3439513}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D263365-2717-4367-85C5-39F8E3439513}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D263365-2717-4367-85C5-39F8E3439513}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D263365-2717-4367-85C5-39F8E3439513}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32BF975A-99CC-497C-AD37-4A9A57D1F743}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32BF975A-99CC-497C-AD37-4A9A57D1F743}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32BF975A-99CC-497C-AD37-4A9A57D1F743}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32BF975A-99CC-497C-AD37-4A9A57D1F743}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
