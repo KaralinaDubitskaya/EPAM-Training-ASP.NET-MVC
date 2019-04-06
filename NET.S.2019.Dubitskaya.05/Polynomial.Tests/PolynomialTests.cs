@@ -10,13 +10,6 @@ namespace PolynomialClass.Tests
     [TestFixture]
     public class PolynomialTests
     {
-        [TestCase(null)]
-        public void PolynomialConstructor_NullCoefficients_ArgumentNullExeption(double[] coefs)
-        {
-            Assert.Throws<ArgumentNullException>(() => new Polynomial(coefs));
-            Assert.Throws<ArgumentNullException>(() => (new Polynomial(new[] { 2.0, 3.0 })).Coefficients = coefs);
-        }
-
         [TestCase(new double[] { 2, 3, 4 }, 4, new double[] { 8, 12, 16 }, ExpectedResult = true)]
         [TestCase(new double[] { 50, 15, 0 }, 0.5, new double[] { 25, 7.5, 0 }, ExpectedResult = true)]
         public static bool MultiplyOperatorTest_PolynomAndNumberInput(double[] coefs1, double number, double[] coefs2)
@@ -105,22 +98,6 @@ namespace PolynomialClass.Tests
             Polynomial poly1 = new Polynomial(coefs1);
             Polynomial poly2 = new Polynomial(coefs2);
             return poly1.Equals(poly2);
-        }
-
-        [TestCase(new double[] { 8, 13, 4, 2, 19 }, ExpectedResult = true)]
-        [TestCase(new double[] { 16, -63, 0, 5 }, ExpectedResult = true)]
-        [TestCase(new double[] { 0, 0, 88 }, ExpectedResult = true)]
-        [TestCase(new double[] { 88, 0, 0 }, ExpectedResult = true)]
-        public static bool GetHashCode_PolynomInput_ReturnsPolynomsHash(double[] coefs)
-        {
-            int hash = 13;
-            for (int i = 0; i < coefs.Length; i++)
-            {
-                hash = (hash * 7) + coefs[i].GetHashCode();
-            }
-
-            Polynomial poly = new Polynomial(coefs);
-            return hash == poly.GetHashCode();
         }
     }
 }

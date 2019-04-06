@@ -6,35 +6,85 @@ using System.Threading.Tasks;
 
 namespace PolynomialClass
 {
-    public sealed class Polynomial
+    public sealed class Polynomial : IEquatable<Polynomial>
     {
         private double[] _coefficients;
+        
+        /// <summary>
+        /// The degree of the polynomial.
+        /// </summary>
+        public int Degree
+        {
+            get 
+            {
+                // Degree of a number is zero.
+                if (_coefficients.Length == 1)
+                {
+                    return 0;
+                }
+
+                // Some coefficients could be zero.
+                int i;
+                for (i = _coefficients.Length - 1; i >= 0; i--)
+                {
+                    if (Math.Abs(_coefficients[i]) > double.Epsilon)
+                    {
+                        break;
+                    }
+                }
+                return i;
+            }
+        }
+
+        /// <summary>
+        /// A coefficient of the specified power of the polynomial.
+        /// </summary>
+        /// <param name="power">A power of the variable that occurs in the polynomial.</param>
+        /// <exception cref="ArgumentOutOfRangeException">Power is not a valid index.</exception>
+        /// <returns>Returns a coefficient of the specified power of the variable.</returns>
+        public double this[int power]
+        {
+            get
+            {
+                if (power >= 0 && power <= Degree)
+                {
+                    return _coefficients[power];
+                }
+                else
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
+            }
+            private set
+            {
+                if (power >= 0 && power <= Degree)
+                {
+                    _coefficients[power] = value;
+                }
+                else
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
 
         /// <summary>
         /// Represent a polynomial in one variable.
         /// </summary>
         /// <param name="coefficients">Coefficients of the polynomial.</param>
         /// <exception cref="ArgumentNullException">Thrown if the argument is null.</exception>
-        public Polynomial(double[] coefficients)
+        public Polynomial(params double[] coefficients)
         {
-            Coefficients = coefficients;
+            _coefficients = coefficients ?? new double[] { };
         }
-
+        
         /// <summary>
-        /// Coefficients of the polynomial.
+        /// Implicit conversion from double value to Polynomial object.
         /// </summary>
-        /// <exception cref="ArgumentNullException">Thrown when there is an attempt to set null value.</exception>
-        public double[] Coefficients
+        /// <param name="value">Double value to be converted.</param>
+        public static implicit operator Polynomial(double value)
         {
-            get
-            {
-                return _coefficients;
-            }
-
-            set
-            {
-                _coefficients = value ?? throw new ArgumentNullException();
-            }
+            return new Polynomial(value);
         }
 
         /// <summary>
@@ -44,45 +94,14 @@ namespace PolynomialClass
         /// <returns>The negation of the polynomial.</returns>
         public static Polynomial operator -(Polynomial polynomial)
         {
-            var resultPolynomial = new Polynomial(polynomial.Coefficients);
+            var resultPolynomial = new Polynomial(polynomial._coefficients);
 
-            for (int i = 0; i < resultPolynomial.Coefficients.Length; i++)
+            for (int i = 0; i <= resultPolynomial.Degree; i++)
             {
-                resultPolynomial.Coefficients[i] *= -1;
+                resultPolynomial[i] *= -1;
             }
 
             return resultPolynomial;
-        }
-
-        /// <summary>
-        /// Adds a scalar and a polynomial.
-        /// </summary>
-        /// <param name="polynomial">A polynomial.</param>
-        /// <param name="multiplier">A scalar.</param>
-        /// <returns>A new polynomial containing the sum.</returns>
-        /// <example> (2x - 1) + 3 = 2x + 2</example>
-        public static Polynomial operator +(Polynomial polynomial, double summand)
-        {
-            double[] resultCoefficients = new double[polynomial.Coefficients.Length];
-
-            for (int i = 0; i < polynomial.Coefficients.Length; i++)
-            {
-                resultCoefficients[i] = polynomial.Coefficients[i] + summand;
-            }
-
-            return new Polynomial(resultCoefficients);
-        }
-
-        /// <summary>
-        /// Adds a scalar and a polynomial.
-        /// </summary>
-        /// <param name="multiplier">A scalar.</param>
-        /// <param name="polynomial">A polynomial.</param>
-        /// <returns>A new polynomial containing the sum.</returns>
-        /// <example> 3 + (2x - 1) = 2x + 2</example>
-        public static Polynomial operator +(double summand, Polynomial polynomial)
-        {
-            return polynomial + summand;
         }
 
         /// <summary>
@@ -94,50 +113,26 @@ namespace PolynomialClass
         /// <example> (2x^3 + 4x) + (4x^3 + x^2 + 1) = 6x^3 + x^2 + 4x + 1</example>
         public static Polynomial operator +(Polynomial first, Polynomial second)
         {
-            int minLength = Math.Min(first.Coefficients.Length, second.Coefficients.Length);
-            int maxLength = Math.Max(first.Coefficients.Length, second.Coefficients.Length);
+            int minLength = Math.Min(first.Degree, second.Degree) + 1;
+            int maxLength = Math.Max(first.Degree, second.Degree) + 1;
 
             double[] resultCoefficients = new double[maxLength];
 
             for (int i = 0; i < minLength; i++)
             {
-                resultCoefficients[i] = first.Coefficients[i] + second.Coefficients[i];
+                resultCoefficients[i] = first[i] + second[i];
             }
 
-            if (first.Coefficients.Length > second.Coefficients.Length)
+            if (first.Degree > second.Degree)
             {
-                Array.Copy(first.Coefficients, minLength, resultCoefficients, minLength, maxLength - minLength);
+                Array.Copy(first._coefficients, minLength, resultCoefficients, minLength, maxLength - minLength);
             }
             else
             {
-                Array.Copy(second.Coefficients, minLength, resultCoefficients, minLength, maxLength - minLength);
+                Array.Copy(second._coefficients, minLength, resultCoefficients, minLength, maxLength - minLength);
             }
 
             return new Polynomial(resultCoefficients);
-        }
-
-        /// <summary>
-        /// Subtract a scalar from a polynomial.
-        /// </summary>
-        /// <param name="polynomial">A polynomial.</param>
-        /// <param name="multiplier">A scalar.</param>
-        /// <returns>A new polynomial containing the difference.</returns>
-        /// <example> (2x - 1) - 3 = 2x - 4</example>
-        public static Polynomial operator -(Polynomial polynomial, double minuend)
-        {
-            return polynomial + (-minuend);
-        }
-
-        /// <summary>
-        /// Subtract a scalar and a polynomial.
-        /// </summary>
-        /// <param name="polynomial">A polynomial.</param>
-        /// <param name="multiplier">A scalar.</param>
-        /// <returns>A new polynomial containing the difference.</returns>
-        /// <example> 3 - (2x - 1) = -2x + 4 </example>
-        public static Polynomial operator -(double subtrahend, Polynomial polynomial)
-        {
-            return subtrahend + (-polynomial);
         }
 
         /// <summary>
@@ -153,37 +148,6 @@ namespace PolynomialClass
         }
 
         /// <summary>
-        /// Multiplies a scalar and a polynomial.
-        /// </summary>
-        /// <param name="polynomial">A polynomial.</param>
-        /// <param name="multiplier">A scalar.</param>
-        /// <returns>A new polynomial containing the result of multiplication.</returns>
-        /// <example> (2x - 1)*3 = 6x - 6</example>
-        public static Polynomial operator *(Polynomial polynomial, double multiplier)
-        {
-            double[] resultCoefficients = new double[polynomial.Coefficients.Length];
-
-            for (int i = 0; i < polynomial.Coefficients.Length; i++)
-            {
-                resultCoefficients[i] = polynomial.Coefficients[i] * multiplier;
-            }
-
-            return new Polynomial(resultCoefficients);
-        }
-
-        /// <summary>
-        /// Multiplies a scalar and a polynomial.
-        /// </summary>
-        /// <param name="multiplier">A scalar.</param>
-        /// <param name="polynomial">A polynomial.</param>
-        /// <returns>A new polynomial containing the result of multiplication.</returns>
-        /// <example> 3*(2x - 1) = 6x - 6</example>
-        public static Polynomial operator *(int multiplier, Polynomial polynomial)
-        {
-            return polynomial * multiplier;
-        }
-
-        /// <summary>
         /// Multiplies two polynomials.
         /// </summary>
         /// <param name="first">A polynomial to be multiplied.</param>
@@ -192,15 +156,15 @@ namespace PolynomialClass
         /// <example> (2x - 1)(5x - 6) = 10x^2 - 17x + 6</example>
         public static Polynomial operator *(Polynomial first, Polynomial second)
         {
-            int resultLength = first.Coefficients.Length + second.Coefficients.Length - 1;
+            int resultLength = first.Degree + second.Degree + 2;
 
             double[] resultCoefficients = new double[resultLength];
 
-            for (int i = 0; i < first.Coefficients.Length; i++)
+            for (int i = 0; i <= first.Degree; i++)
             {
-                for (int j = 0; j < second.Coefficients.Length; j++)
+                for (int j = 0; j <= second.Degree; j++)
                 {
-                    resultCoefficients[i + j] += first.Coefficients[i] * second.Coefficients[j];
+                    resultCoefficients[i + j] += first[i] * second[j];
                 }
             }
 
@@ -216,14 +180,74 @@ namespace PolynomialClass
         /// <example> (6x - 4) / 2 = 3x - 2</example>
         public static Polynomial operator /(Polynomial polynomial, double divider)
         {
-            double[] resultCoefficients = new double[polynomial.Coefficients.Length];
+            double[] resultCoefficients = new double[polynomial.Degree];
 
-            for (int i = 0; i < polynomial.Coefficients.Length; i++)
+            for (int i = 0; i < polynomial.Degree; i++)
             {
-                resultCoefficients[i] = polynomial.Coefficients[i] / divider;
+                resultCoefficients[i] = polynomial[i] / divider;
             }
 
             return new Polynomial(resultCoefficients);
+        }
+
+        /// <summary>
+        /// Checks if the current instance and the polynomial are equal.
+        /// </summary>
+        /// <param name="other">The polynomial to be compared.</param>
+        /// <returns>True, if the polynomials are equal; otherwise, false.</returns>
+        public bool Equals(Polynomial other)
+        {
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
+            if (this.Degree != other.Degree)
+            {
+                return false;
+            }
+
+            for (int i = 0; i <= this.Degree; i++)
+            {
+                if (!this[i].Equals(other[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Checks if current instance and object are equal.
+        /// </summary>
+        /// <param name="obj">The object to be compared.</param>
+        /// <returns>
+        /// True, if the instance and object are equal; otherwise, false.
+        /// </returns>
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != this.GetType())
+            {
+                return false;
+            }
+
+            return this.Equals((Polynomial)obj);
         }
 
         /// <summary>
@@ -235,20 +259,17 @@ namespace PolynomialClass
         /// <returns>True, if polynomials are equal; otherwise, false.<returns>
         public static bool operator ==(Polynomial first, Polynomial second)
         {
-            if (first.Coefficients.Length != second.Coefficients.Length)
+            if (ReferenceEquals(first, second))
+            {
+                return true;
+            }
+
+            if (ReferenceEquals(first, null))
             {
                 return false;
             }
 
-            for (int i = 0; i < first.Coefficients.Length; i++)
-            {
-                if (first.Coefficients[i] != second.Coefficients[i])
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            return first.Equals(second);
         }
 
         /// <summary>
@@ -271,37 +292,37 @@ namespace PolynomialClass
         {
             StringBuilder sb = new StringBuilder();
 
-            for (int i = Coefficients.Length - 1; i >= 0; i--)
+            for (int i = Degree; i >= 0; i--)
             {
-                if (Coefficients[i] != 0.0)
+                if (this[i] != 0.0)
                 {
                     if (i == 0)
                     {
                         if (sb.Length > 0)
                         {
-                            sb.AppendFormat($" + {Coefficients[i]}");
+                            sb.AppendFormat($" + {this[i]}");
                         }
                         else
                         {
-                            sb.Append(Coefficients[i]);
+                            sb.Append(this[i]);
                         }
                     }
                     else
                     {
                         if (sb.Length > 0)
                         {
-                            if (Coefficients[i] > 0)
+                            if (this[i] > 0)
                             {
-                                sb.AppendFormat($" + {Coefficients[i]}*x^{i}");
+                                sb.AppendFormat($" + {this[i]}*x^{i}");
                             }
                             else
                             {
-                                sb.AppendFormat($" - {Math.Abs(Coefficients[i])}*x^{i}");
+                                sb.AppendFormat($" - {Math.Abs(this[i])}*x^{i}");
                             }
                         }
                         else
                         {
-                            sb.AppendFormat($"{Coefficients[i]}*x^{i}");
+                            sb.AppendFormat($"{this[i]}*x^{i}");
                         }
                     }
                 }
@@ -316,31 +337,10 @@ namespace PolynomialClass
         /// <returns>An integer hash code.</returns>
         public override int GetHashCode()
         {
-            int hashcode = 13;
-
-            for (int i = 0; i < Coefficients.Length; i++)
+            unchecked
             {
-                hashcode = (hashcode * 7) + Coefficients[i].GetHashCode();
+                return ((_coefficients != null ? _coefficients.GetHashCode() : 0) * 397) ^ Degree;
             }
-
-            return hashcode;
-        }
-
-        /// <summary>
-        /// Checks if current instance and object are equal
-        /// </summary>
-        /// <param name="obj">The object to be compared.</param>
-        /// <returns>
-        /// True, if the instance and object are equal; otherwise, false.
-        /// </returns>
-        public override bool Equals(object obj)
-        {
-            if (obj.GetType() != this.GetType() || obj == null || this != (Polynomial)obj)
-            {
-                return false;
-            }
-
-            return true;
         }
     }
 }
