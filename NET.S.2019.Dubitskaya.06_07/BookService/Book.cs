@@ -20,10 +20,33 @@ namespace BookService
 
         #endregion
 
+        #region Constructors
+
+        public Book()
+        {
+            Isbn = string.Empty;
+            Author = string.Empty;
+            Title = string.Empty;
+            Publisher = string.Empty;
+        }
+
+        public Book(string isbn, string author, string title, string publisher, int year, int pages, double price)
+        {
+            Isbn = isbn;
+            Author = author;
+            Title = title;
+            Publisher = publisher;
+            Year = year;
+            Pages = pages;
+            Price = price;
+        }
+
+        #endregion
+
         #region Properties
 
         /// <summary>
-        /// The international Standart Book Number.
+        /// The international Standard Book Number.
         /// </summary>
         /// <see cref="https://en.wikipedia.org/wiki/International_Standard_Book_Number"/>
         public string Isbn
@@ -33,7 +56,7 @@ namespace BookService
             {
                 if (!IsIsbnValid(value))
                 {
-                    throw new ArgumentException();
+                    throw new ArgumentException("Invalid ISBN.");
                 }
 
                 _isbn = value;
@@ -116,6 +139,7 @@ namespace BookService
         public double Price
         {
             get => _price;
+
             private set
             {
                 if (value < 0)
@@ -126,54 +150,29 @@ namespace BookService
                 _price = value;
             }
         }
-
-
-        #endregion
-
-        #region Constructors
-
-        public Book()
-        {
-            Isbn = string.Empty;
-            Author = string.Empty;
-            Title = string.Empty;
-            Publisher = string.Empty;
-        }
-
-        public Book(string isbn, string author, string title, string publisher,
-            int year, int pages, double price)
-        {
-            Isbn = isbn;
-            Author = author;
-            Title = title;
-            Publisher = publisher;
-            Year = year;
-            Pages = pages;
-            Price = price;
-        }
-
+        
         #endregion
 
         #region Public methods
 
         /// <summary>
-        /// Calculates the current instance's hashcode.
+        /// Calculates the current instance's hash code.
         /// </summary>
-        /// <returns>An integer hashcode value.</returns>
+        /// <returns>An integer hash code value.</returns>
         public override int GetHashCode()
         {
             unchecked
             {
                 int hashCode = 17;
 
-                hashCode = 31 * hashCode + (_isbn?.GetHashCode() ?? 0);
-                hashCode = 31 * hashCode + (_author?.GetHashCode() ?? 0);
-                hashCode = 31 * hashCode + (_title?.GetHashCode() ?? 0);
-                hashCode = 31 * hashCode + (_publisher?.GetHashCode() ?? 0);
+                hashCode = (31 * hashCode) + (_isbn?.GetHashCode() ?? 0);
+                hashCode = (31 * hashCode) + (_author?.GetHashCode() ?? 0);
+                hashCode = (31 * hashCode) + (_title?.GetHashCode() ?? 0);
+                hashCode = (31 * hashCode) + (_publisher?.GetHashCode() ?? 0);
 
-                hashCode = 31 * hashCode + _year.GetHashCode();
-                hashCode = 31 * hashCode + _pages.GetHashCode();
-                hashCode = 31 * hashCode + _price.GetHashCode();
+                hashCode = (31 * hashCode) + _year.GetHashCode();
+                hashCode = (31 * hashCode) + _pages.GetHashCode();
+                hashCode = (31 * hashCode) + _price.GetHashCode();
 
                 return hashCode;
             }
@@ -205,13 +204,13 @@ namespace BookService
                 return true;
             }
 
-            return (this.Isbn == other.Isbn &&
-                    this.Author == other.Author &&
-                    this.Title == other.Title &&
-                    this.Publisher == other.Publisher &&
-                    this.Year == other.Year &&
-                    this.Pages == other.Pages &&
-                    this.Price == other.Price);
+            return this.Isbn == other.Isbn &&
+                   this.Author == other.Author &&
+                   this.Title == other.Title &&
+                   this.Publisher == other.Publisher &&
+                   this.Year == other.Year &&
+                   this.Pages == other.Pages &&
+                   this.Price == other.Price;
         }
 
         /// <summary>
@@ -283,15 +282,15 @@ namespace BookService
 
             int[] digits = isbn
                 .Where(c => char.IsDigit(c) || char.ToUpper(c) == 'X')
-                .Select(c => char.IsDigit(c) ? Convert.ToInt32(c) : 10)
+                .Select(c => char.IsDigit(c) ? (int)char.GetNumericValue(c) : 10)
                 .ToArray();
 
             switch (digits.Length)
             {
                 case 10:
-                    return ChecksumIsbn10(digits) == digits.Last();
+                    return IsIsbn10Valid(digits);
                 case 13:
-                    return ChecksumIsbn13(digits) == digits.Last();
+                    return ChecksumIsbn13(digits) == (digits.Last() % 10);
                 default:
                     return false;
             }
@@ -300,16 +299,18 @@ namespace BookService
         // Calculate checksum of the ISBN-10.
         // NOTE: Parameters are not checked!
         // See: https://en.wikipedia.org/wiki/International_Standard_Book_Number
-        private int ChecksumIsbn10(int[] digits)
+        private bool IsIsbn10Valid(int[] digits)
         {
-            // Calculate weighed sum of the first 9 digits.
             int sum = 0;
-            for (int i = digits.Length - 1; i >= 0; i--)
+            int temp = 0;
+
+            for (int i = 0; i < digits.Length; i++)
             {
-                sum += digits[i] * i;
+                temp += digits[i];
+                sum += temp;
             }
 
-            return sum % 11;
+            return sum % 11 == 0;
         }
 
         // Calculate checksum of the ISBN-13.

@@ -8,27 +8,31 @@ namespace BookService
 {
     public class BookListService
     {
-        public List<Book> Books { get; private set; }
-
         /// <summary>
         /// Initializes a new instance of the BookListService class.
         /// </summary>
         /// <param name="books">Books to be stored.</param>
         /// <returns>Returns instance of the BookListService class.</returns>
+        /// <remarks>Null parameters would be skipped.</remarks>
         public BookListService(params Book[] books)
         {
             Books = new List<Book>();
 
             foreach (Book book in books)
             {
-                if (book == null)
+                if (book == null || Books.IndexOf(book) != -1)
                 {
-                    throw new ArgumentNullException();
+                    continue;
                 }
 
                 Books.Add(book);
             }
         }
+
+        /// <summary>
+        /// List of books to operate with.
+        /// </summary>
+        public List<Book> Books { get; private set; }
 
         /// <summary>
         /// Add the book.
@@ -109,22 +113,21 @@ namespace BookService
         }
 
         /// <summary>
-        /// Save books to the specified file.
+        /// Save books to the specified storage.
         /// </summary>
         /// <param name="books">Books to be stored.</param>
-        /// <param name="filename">File for books to be stored.</param>
-        public void SaveBooks(IBookListStorage storage, string filename)
+        public void SaveBooks(IBookListStorage storage)
         {
-            storage.SaveBooks(Books, filename);
+            storage.SaveBooks(Books);
         }
 
         /// <summary>
-        /// Load books from the specified file.
+        /// Load books from the specified storage.
         /// </summary>
-        /// <param name="fileName">File to be loaded.</param>
-        public void LoadBooks(IBookListStorage storage, string filename)
+        /// <param name="storage">Storage to load books from.</param>
+        public void LoadBooks(IBookListStorage storage)
         {
-            Books = storage.LoadBooks(filename);
+            Books = storage.LoadBooks();
         }
     }
 }

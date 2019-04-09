@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Console;
 
 namespace BookService.ConsoleTests
 {
@@ -12,34 +13,62 @@ namespace BookService.ConsoleTests
     {
         static void Main(string[] args)
         {
-            BookListService booksService = new BookListService();
+            Book book0 = new Book("0-8044-2957-X", "title0", "author0",
+               "publisher0", 2012, 10, 1.3);
 
-            booksService.AddBook(new Book("0-85131-041-8", "title1", "author1",
+            BookListService booksService = new BookListService(book0, book0);
+
+            WriteLine("Create BookListService.");
+            DisplayBooks(booksService.Books);
+
+            booksService.AddBook(new Book("0-8044-2957-x", "title1", "author1",
                 "publisher1", 2018, 150, 2.3));
             booksService.AddBook(new Book("0-684-84328-5", "title2", "author2",
-               "publisher2", 2018, 150, 3.3));
-            booksService.AddBook(new Book("ISBN: 9971-5-0210-0", "title3", "author3",
-               "publisher3", 2018, 150, 4.3));
+               "publisher2", 2018, 150, 6.3));
+            booksService.AddBook(new Book("ISBN: 0-8044-2957-X", "title3", "author3",
+               "publisher3", 2018, 150, 5.7));
             booksService.AddBook(new Book("8090273416", "title4", "author4",
-               "publisher4", 2018, 150, 5.3));
+               "publisher4", 2018, 150, 3.2));
             booksService.AddBook(new Book(" 0-8044-2957-X", "title5", "author5",
-               "publisher5", 2018, 150, 6.3));
+               "publisher5", 2018, 150, 4.1));
+
+            WriteLine("Add some books.");
+            DisplayBooks(booksService.Books);
 
             booksService.SortBooks(new PriceComparator());
 
-            foreach (Book book in booksService.Books)
-                Console.WriteLine(book);
+            WriteLine("Sort books by price.");
+            DisplayBooks(booksService.Books);
 
-            BookListStorage storage = new BookListStorage();
-            booksService.SaveBooks(storage, "books.bin");
+            WriteLine("Save books to file \"books\".bin.");
 
-            booksService.Books.Clear();
-            booksService.LoadBooks(storage, "books.bin");
+            BookListStorage storage = new BookListStorage("books.bin");
+            booksService.SaveBooks(storage);
+
+            WriteLine("Clear list of books.");
+            booksService = new BookListService();
+            DisplayBooks(booksService.Books);
+
+            booksService.LoadBooks(storage);
+
+            WriteLine("Load books from file.");
+            DisplayBooks(booksService.Books);
 
             var finder = new BookFinderByPriceRange(1.0, 5.0);
-            List<Book> tmp = booksService.FindBookByTag(finder);
-            foreach (Book book in tmp)
-                Console.WriteLine(book);
+            WriteLine("Books with price from 1.0 to 5.0.");
+            DisplayBooks(booksService.FindBookByTag(finder));
+
+            ReadKey();
+        }
+
+        private static void DisplayBooks(IEnumerable<Book> books)
+        {
+            WriteLine("Books:");
+
+            foreach(Book book in books)
+            {
+                WriteLine(book);
+            }
         }
     }
 }

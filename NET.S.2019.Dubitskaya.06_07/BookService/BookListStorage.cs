@@ -9,10 +9,19 @@ namespace BookService
 {
     public class BookListStorage : IBookListStorage
     {
+        public BookListStorage(string filename)
+        {
+            Filename = filename;
+        }
+
+        /// <summary>
+        /// Name of the file to store the data about books.
+        /// </summary>
+        public string Filename { get; set; }
+
         /// <summary>
         /// Load books from the specified file.
         /// </summary>
-        /// <param name="fileName">File to be loaded.</param>
         /// <returns>List of loaded books.</returns>
         /// <exception cref="ArgumentException">Thrown if the filename is a zero-length string, 
         /// contains only white space, or contains one or more invalid characters.</exception>
@@ -22,16 +31,16 @@ namespace BookService
         /// file name, or both exceed the system-defined maximum length.</exception>
         /// <exception cref="DirectoryNotFoundException">Thrown if the specified path is invalid.</exception>
         /// <exception cref="UnauthorizedAccessException">Thrown if the file is read-only.</exception>
-        public List<Book> LoadBooks(string filename)
+        public List<Book> LoadBooks()
         {
-            if (!File.Exists(filename))
+            if (!File.Exists(Filename))
             {
                 return null;
             }
 
             List<Book> books = new List<Book>();
 
-            using (BinaryReader reader = new BinaryReader(File.Open(filename, FileMode.Open)))
+            using (BinaryReader reader = new BinaryReader(File.Open(Filename, FileMode.Open)))
             {
                 while (reader.BaseStream.Length != reader.BaseStream.Position)
                 {
@@ -53,7 +62,6 @@ namespace BookService
         /// Save books to the specified file.
         /// </summary>
         /// <param name="books">Books to be stored.</param>
-        /// <param name="filename">File for books to be stored.</param>
         /// <exception cref="ArgumentException">Thrown if the filename is a zero-length string, 
         /// contains only white space, or contains one or more invalid characters.</exception>
         /// <exception cref="IOException">Thrown if an I/O error occurs.</exception>
@@ -61,9 +69,9 @@ namespace BookService
         /// <exception cref="PathTooLongException">Thrown if the specified path, 
         /// file name, or both exceed the system-defined maximum length.</exception>
         /// <exception cref="DirectoryNotFoundException">Thrown if the specified path is invalid.</exception>
-        public void SaveBooks(List<Book> books, string filename)
+        public void SaveBooks(List<Book> books)
         {
-            using (BinaryWriter writer = new BinaryWriter(File.Open(filename, FileMode.Create)))
+            using (BinaryWriter writer = new BinaryWriter(File.Open(Filename, FileMode.Create)))
             {
                 foreach (Book book in books)
                 {
