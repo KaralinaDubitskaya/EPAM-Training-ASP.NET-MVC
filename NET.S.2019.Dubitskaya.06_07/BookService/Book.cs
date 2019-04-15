@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace BookService
 {
-    public class Book : IEquatable<Book>, IComparable<Book>
+    public class Book : IEquatable<Book>, IComparable<Book>, IFormattable
     {
-        #region Fields
+        #region Fields and Const values
+
+        private const string DefaultFormatString = "ATY";
 
         private string _isbn;
         private string _author;
@@ -179,12 +182,100 @@ namespace BookService
         }
 
         /// <summary>
-        /// Returns string representation of the book.
+        /// Format the value of the book into a string representation.
         /// </summary>
-        /// <returns>String that contains information about the book.</returns>
+        /// <returns>String representation of the book.</returns>
         public override string ToString()
         {
-            return string.Format("{0} ({1}). {2}. ed. {3}, p.{4}. {5}. Price: {6}.", Author, Year, Title, Publisher, Pages, Isbn, Price);
+            return this.ToString(null, null);
+        }
+
+        /// <summary>
+        /// Format the value of the book into a string representation.
+        /// </summary>
+        /// <param name="format">Format string.</param>
+        /// <returns>String representation of the book.</returns>
+        public string ToString(string format)
+        {
+            return this.ToString(format, null);
+        }
+
+        /// <summary>
+        /// Format the value of the book into a string representation.
+        /// </summary>
+        /// <param name="provider">Defines the symbols used in converting an object to its string representation.</param>
+        /// <returns>String representation of the book.</returns>
+        public string ToString(IFormatProvider provider)
+        {
+            return this.ToString(null, provider);
+        }
+
+        /// <summary>
+        /// Format the value of the book into a string representation.
+        /// </summary>
+        /// <param name="format">Format string.</param>
+        /// <param name="provider">Defines the symbols used in converting an object to its string representation.</param>
+        /// <returns>String representation of the book.</returns>
+        public string ToString(string format, IFormatProvider provider)
+        {
+            if (string.IsNullOrEmpty(format))
+            {
+                format = DefaultFormatString;
+            }
+
+            if (provider == null)
+            {
+                provider = CultureInfo.CurrentCulture;
+            }
+
+            bool isStart = true;
+            StringBuilder sb = new StringBuilder();
+
+            foreach (char letter in format)
+            {
+                if (!isStart)
+                {
+                    sb.Append(", ");
+                }
+                else
+                {
+                    isStart = false;
+                }
+
+                switch (letter)
+                {
+                    case 'I':
+                        sb.Append(this.Isbn.ToString(provider));
+                        break;
+                    case 'A':
+                        sb.Append(this.Author.ToString(provider));
+                        break;
+                    case 'T':
+                        sb.AppendFormat("\"{0}\"", this.Title.ToString(provider));
+                        break;
+                    case 'E':
+                        sb.Append(this.Publisher.ToString(provider));
+                        break;
+                    case 'Y':
+                        sb.Append(this.Year.ToString(provider));
+                        break;
+                    case 'p':
+                        sb.AppendFormat("{0} pages", this.Pages.ToString(provider));
+                        break;
+                    case 'P':
+                        sb.Append(this.Price.ToString(provider));
+                        break;
+                    default:
+                        throw new FormatException(string.Format("The {0} format string is not supported.", format));
+                }
+            }
+
+            if (sb.Length > 0)
+            {
+                sb.Append(".");
+            }
+
+            return sb.ToString();
         }
 
         /// <summary>
