@@ -11,6 +11,8 @@ Test with the following types:
     -   System.Int32 (default and custom comparers),
     -   System.String (default and custom comparers),
     -   custom class Book with a defined sort order for its instances (default and custom comparers),
-    -   custom struct Point without a defined sort order for its instances (custom comparer).                                                                                                                                                                                     
+    -   custom struct Point without a defined sort order for its instances (custom comparer).                                           
+    
+                                                                                                          
 Karalina Dubitskaya                                                                        
 dubitskaya.karalina@gmail.com
