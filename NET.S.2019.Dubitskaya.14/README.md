@@ -1,9 +1,16 @@
-# Задачи
-1. Разработать обобщенный класс-коллекцию Queue, реализующий основные операции для работы с очередью, и предоставляющий возможность итерирования, реализовав итератор «вручную» (без использования блок-
-итератора yield). Протестировать методы разработанного класса.
-2. Создать обобщенные классы для представления квадратной, симметрической и диагональной матриц (симметрическая матрица – это квадратная матрица, которая совпадает с транспонированной к ней; диагональная матрица – это квадратная матрица, у которой элементы вне главной диагонали заведомо имеют значения по умолчанию типа элемента). Описать в созданных классах событие, которое происходит при изменении элемента матрицы с индексами (i, j). Расширить функциональность существующей иерархии классов, добавив возможность операции сложения двух матриц любого типа. Разработать unit-тесты.
-3. Разработать обобщенный класс-коллекцию BinarySearchTree (бинарное дерево поиска). Предусмотреть возможности использования подключаемого интерфейса для реализации отношения порядка. Реализовать три способа обхода дерева: прямой (preorder), поперечный (inorder), обратный (postorder): для реализации использовать блок-итератор (yield). Протестировать разработанный класс, используя следующие типы:
-    ● System.Int32 (использовать сравнение по умолчанию и подключаемый компаратор);
-    ● System.String (использовать сравнение по умолчанию и подключаемый компаратор);
-    ● пользовательский класс Book, для объектов которого реализовано отношения порядка (использовать сравнение по умолчанию и подключаемый компаратор);
-    ● пользовательскую структуру Point, для объектов которого не реализовано отношения порядка (использовать подключаемый компаратор).
+
+# Days 11-12
+### EPAM-Training-ASP.NET-MVC                                                                                                           
+                                                                                                           
+### Tasks:                                                                                                            
+
+1. Develop a generic class **Queue collection** that implements the basic operations for working with the queue and allows iteration by implementing an “manually” iterator (without using the yield block iterator). Test the methods of the developed class.
+2. Create generic classes for representing **square, symmetric and diagonal matrices** (a symmetric matrix is ​​a square matrix that matches a transposed matrix; a diagonal matrix is ​​a square matrix whose elements outside the main diagonal certainly have element type default values). Implement in the created classes an event that occurs when the matrix element with indices (i, j) changes. Extend the functionality of the existing class hierarchy by adding the ability to add two matrices of any type. Add unit tests.
+3. Develop a generic class **BinarySearchTree**. Provide an option to use custom sort order. Implement three ways for traversing the tree: Inorder, Preorder and Postorder. Use  _yield_  to define an iterator.
+Test with the following types:
+    -   System.Int32 (default and custom comparers),
+    -   System.String (default and custom comparers),
+    -   custom class Book with a defined sort order for its instances (default and custom comparers),
+    -   custom struct Point without a defined sort order for its instances (custom comparer).                                                                                                                                                                                     
+Karalina Dubitskaya                                                                        
+dubitskaya.karalina@gmail.com
